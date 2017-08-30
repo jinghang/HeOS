@@ -14,7 +14,7 @@ MultiBootHeader mbh __attribute__((section(".text"))) = {
 };
 
 void KernelEntry(void){
-    __asm__("movl %%eax,%0":"=m"(magic));
+    __asm__ __volatile__("movl %%eax,%0":"=m"(magic));
     
     if(magic != 0X1BADB002){
         mbprint("Kernel load error!\n");
