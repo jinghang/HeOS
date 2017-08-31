@@ -8,3 +8,8 @@ gcc -S multboot.c
 ```
 objdump -d multboot.o
 ```
+
+* 生成 汇编 lst 文件
+```
+name -f elf boot.asm -l boot lst
+```
