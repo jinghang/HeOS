@@ -1,4 +1,4 @@
 file he_kernel
 target remote:1234
-break start
+break kernel_entry
 c
