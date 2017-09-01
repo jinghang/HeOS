@@ -38,13 +38,15 @@ typedef enum _console_foreground_color_t {
     foreground_color_light_brown  =   0b1110, // 黄
     foreground_color_light_white  =   0b1111  // 白
 
-} console_foreground_color_t
+} console_foreground_color_t;
 
 // 清屏
 void console_clear();
 
+uint16_t get_color_attribute(console_foreground_color_t foreground_color, console_background_color_t background_color);
+
 // 屏幕输出一个字符，带颜色
-void console_put_char_color(char c, console_foreground_color_t foreground_color, console_background_color_t background_color)
+void console_put_char_color(char c, console_foreground_color_t foreground_color, console_background_color_t background_color);
 
 // 屏幕输出一个以\0结尾德字符窜，默认黑底白字
 void console_write(char* str);
@@ -53,9 +55,9 @@ void console_write(char* str);
 void console_write_color(char* str, console_foreground_color_t foreground_color, console_background_color_t background_color);
 
 // 屏幕输出一个十六禁止的整数
-void console_write_hex(uint32_t num, console_foreground_color_t foreground_color, console_background_color_t background_color)
+void console_write_hex(uint32_t num, console_foreground_color_t foreground_color, console_background_color_t background_color);
 
 // 屏幕输出一个十进制的整数
-void console_write_dec(uint32_t num, console_foreground_color_t foreground_color, console_background_color_t background_color)
+void console_write_dec(uint32_t num, console_foreground_color_t foreground_color, console_background_color_t background_color);
 
 #endif
