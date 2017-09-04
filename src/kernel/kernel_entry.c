@@ -4,7 +4,8 @@ void printk(char* str);
 
 void kernel_entry(void){
     //printk("Hello World!\n");
-    void console_put_char_color("a", background_color_black, foreground_color_green);
+    //console_put_char_color('a', foreground_color_green, background_color_black);
+    console_write_color("Hello World!",foreground_color_green,background_color_black);
     return;
 }
 

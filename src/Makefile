@@ -45,7 +45,11 @@ mount_image:
 
 .PHONY:umount_image
 umount_image:
-	sudo umount /mnt	
+	sudo umount /mnt
+
+.PHONY:run
+run:
+	qemu -hda disk.img
 
 .PHONY:qemu
 qemu:
