@@ -107,10 +107,47 @@ void console_write_color(char* str, console_foreground_color_t foreground_color,
 
 // 屏幕输出一个十六禁止的整数
 void console_write_hex(uint32_t num, console_foreground_color_t foreground_color, console_background_color_t background_color){
-    //
+    int tmp;
+    char noZeroes = 1;
+    console_write_color("0x", foreground_color, background_color);
+
+    int i;
+    for(i = 28; i >= 0; i -= 4){
+        tmp = (num >> i)& 0xf;
+        if(tmp == 0 && noZeroes != 0){
+            continue;
+        }
+        noZeroes = 0;
+        if(tmp >= 0xa){
+            console_put_char_color(tmp-0xa+'a',foreground_color, background_color);
+        }else{
+            console_put_char_color(tmp + '0', foreground_color, background_color);
+        }
+    }
 }
 
 // 屏幕输出一个十进制的整数
 void console_write_dec(uint32_t num, console_foreground_color_t foreground_color, console_background_color_t background_color){
+    if(num == 0){
+        console_put_char_color('0', foreground_color, background_color);
+    }
     //
+    uint32_t acc = num;
+    char c[32];
+    int i = 0;
+    while(acc > 0){
+        c[i] = '0' + acc % 10;
+        acc /= 10;
+        i++;
+    }
+    c[i] = 0;
+    //
+    char c2[32];
+    c2[i--]=0;
+    int j = 0;
+    while(i >= 0){
+        c2[i--] = c[j++];
+    }
+
+    console_write_color(c2, foreground_color, background_color);
 }
