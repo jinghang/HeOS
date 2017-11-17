@@ -1,17 +1,6 @@
-# HeOS
-* 将源码编译成汇编
-```
-gcc -S multboot.c
-```
+# HeOS 用C写的一个X86内核
 
-* 反汇编 obj 文件
-```
-objdump -d multboot.o
-```
+## 说明文档
+* [001 开发环境](./doc/001开发环境.md)
+* [002 创建可引导虚拟磁盘](./doc/002可引导虚拟磁盘.md)
 
-* 生成 汇编 lst 文件
-```
-name -f elf boot.asm -l boot lst
-```
-
-* http://wiki.ubuntu.org.cn/%E7%94%A8GDB%E8%B0%83%E8%AF%95%E7%A8%8B%E5%BA%8F
