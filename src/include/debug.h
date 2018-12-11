@@ -14,7 +14,11 @@
     }while(0)
 
 // 编译期间静态检测
-#define static _assert(x) switch(x){case 0: case (x): ;}
+#define static_assert(x)      \
+    switch(x){                \
+        case 0:               \
+        case (x): ;           \
+    }
 
 // 初始化 debug 信息
 void init_debug();

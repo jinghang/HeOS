@@ -3,7 +3,6 @@
 #include "../include/elf.h"
 
 // 从 multiboot_t 结构体获取ELF信息
-
 elf_t elf_from_multiboot(multiboot_t *mb){
     int i;
     elf_t elf;
@@ -35,7 +34,7 @@ const char * elf_lookup_symbol(uint32_t addr, elf_t *elf){
         }
         // 通过函数调用地址查到函数的名字(地址在该函数的代码段地址区间之内)
         if((addr >= elf->symtab[i].value) && (addr < (elf->symtab[i].value + elf->symtab[i].size))){
-            
+            return (const char *)((uint32_t)elf->strtab + elf->symtab[i].name);
         }
     }
 
