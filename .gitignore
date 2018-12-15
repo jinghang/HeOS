@@ -1,1 +1,3 @@
 *.o
+.vscode/
+src/he_kernel
