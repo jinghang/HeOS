@@ -30,6 +30,19 @@ int kernel_entry(){
     printk("kenrel in memory used:  %dKB\n\n", (kern_end - kern_start + 1023)/1024);
 
     show_memory_map();
+    init_pmm();
+    printk_color(background_color_black, foreground_color_red, "\nThe count of physical memeory page is: %u\n\n", phy_page_count);
+    uint32_t allc_addr = NULL;
+    printk_color(background_color_black, foreground_color_brown, "The physical memory alloc: \n");
+    allc_addr = pmm_alloc_page();
+    printk_color(background_color_black, foreground_color_brown, "Alloc physical addr: 0x%08X\n", allc_addr);
+    allc_addr = pmm_alloc_page();
+    printk_color(background_color_black, foreground_color_brown, "Alloc physical addr: 0x%08X\n", allc_addr);
+    allc_addr = pmm_alloc_page();
+    printk_color(background_color_black, foreground_color_brown, "Alloc physical addr: 0x%08X\n", allc_addr);
+    allc_addr = pmm_alloc_page();
+    printk_color(background_color_black, foreground_color_brown, "Alloc physical addr: 0x%08X\n", allc_addr);
+
     
     return 0;
 }
