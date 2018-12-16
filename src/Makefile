@@ -49,14 +49,14 @@ umount_image:
 
 .PHONY:run
 run:
-	qemu -hda disk.img
+	qemu -m 512 -hda disk.img
 
 .PHONY:qemu
 qemu:
-	qemu -hda disk.img
+	qemu -m 512 -hda disk.img
 
 .PHONY:debug
 debug:
-	qemu -S -s -hda disk.img &
+	qemu -m 512 -S -s -hda disk.img &
 	sleep 1
 	cgdb -x scripts/gdbinit
