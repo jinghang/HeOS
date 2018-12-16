@@ -5,8 +5,8 @@
 #include "../include/idt.h"
 
 void timer_callback(pt_regs *regs){
-    static uint32_t tick = 0;
-    printk_color(background_color_black, foreground_color_white, "Tick:%d\n", tick++);
+    // static uint32_t tick = 0;
+    // printk_color(background_color_black, foreground_color_white, "Tick:%d\n", tick++);
 }
 
 void init_timer(uint32_t frequency){
