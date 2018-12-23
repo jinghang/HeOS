@@ -5,9 +5,10 @@
 #include "../include/idt.h"
 #include "../include/timer.h"
 #include "../include/pmm.h"
+#include "../include/vmm.h"
 
 // 内核初始化
-void kern_init();
+void kernel_init();
 
 // 开启分页机制之后， multiboot 数据指针
 multiboot_t *glb_mboot_ptr;
@@ -16,9 +17,19 @@ multiboot_t *glb_mboot_ptr;
 char kern_stack[STACK_SIZE];
 
 // 内核使用的临时页表
-__attribute__((section(".init.data"))) pgt_t *pgd_tmp = (pgd_t *)0x1000;
+__attribute__((section(".init.data"))) pgd_t *pgd_tmp = (pgd_t *)0x1000;
+__attribute__((section(".init.data"))) pgd_t *pte_low = (pgd_t *)0x2000;
+__attribute__((section(".init.data"))) pgd_t *pte_high =(pgd_t *)0x3000;
 
-int kernel_init(){
+// 内核入口函数
+__attribute__((section(".init.text"))) void kernel_entry(){
+    //
+
+    // 调用内核初始化函数
+    kernel_init();
+}
+
+void kernel_init(){
     
     init_debug();
     init_gdt();
@@ -56,5 +67,7 @@ int kernel_init(){
     printk_color(background_color_black, foreground_color_brown, "Alloc physical addr: 0x%08X\n", allc_addr);
 
     
-    return 0;
+    while(1){
+        asm volatile("hlt");
+    }
 }
