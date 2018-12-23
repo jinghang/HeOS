@@ -6,7 +6,19 @@
 #include "../include/timer.h"
 #include "../include/pmm.h"
 
-int kernel_entry(){
+// 内核初始化
+void kern_init();
+
+// 开启分页机制之后， multiboot 数据指针
+multiboot_t *glb_mboot_ptr;
+
+// 开启分页机制之后的内核栈
+char kern_stack[STACK_SIZE];
+
+// 内核使用的临时页表
+__attribute__((section(".init.data"))) pgt_t *pgd_tmp = (pgd_t *)0x1000;
+
+int kernel_init(){
     
     init_debug();
     init_gdt();

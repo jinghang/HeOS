@@ -9,23 +9,22 @@ MBOOT_CHECKSUM 		equ 	- (MBOOT_HEADER_MAGIC + MBOOT_HEADER_FLAGS)
 
 [BITS 32]
 
-section .text
+section .init.text
 
 dd MBOOT_HEADER_MAGIC 	; GRUB 会通过这个魔数判断该映像是否支持
 dd MBOOT_HEADER_FLAGS   ; GRUB 的一些加载时选项，其详细注释在定义处
 dd MBOOT_CHECKSUM       ; 检测数值，其含义在定义处
 
 [GLOBAL start] 	    	; 内核代码入口，此处提供该声明给 ld 链接器
-[GLOBAL glb_mboot_ptr] 	; 全局的 struct multiboot * 变量
+[GLOBAL mboot_ptr_tmp] 	; 全局的 struct multiboot * 变量
 [EXTERN kernel_entry] 	; 声明内核 C 代码的入口函数
 
 start:
-	cli  		    	 ; 此时还没有设置好保护模式的中断处理，要关闭中断
-			        	 ; 所以必须关闭中断
+	cli  		    	 ; 此时还没有设置好保护模式的中断处理，要关闭中断; 所以必须关闭中断
 	mov esp, STACK_TOP      ; 设置内核栈地址
 	mov ebp, 0 	    	 ; 帧指针修改为 0
 	and esp, 0FFFFFFF0H	 ; 栈地址按照16字节对齐
-	mov [glb_mboot_ptr], ebx ; 将 ebx 中存储的指针存入全局变量
+	mov [mboot_ptr_tmp], ebx ; 将 ebx 中存储的指针存入全局变量
 	call kernel_entry		 ; 调用内核入口函数
 stop:
 	hlt 			 ; 停机指令，什么也不做，可以降低 CPU 功耗
@@ -33,12 +32,8 @@ stop:
 
 ;-----------------------------------------------------------------------------
 
-section .bss 			 ; 未初始化的数据段从这里开始
-stack:
-	resb 9000H	 	 ; 这里作为内核栈
-glb_mboot_ptr: 			 ; 全局的 multiboot 结构体指针
-	resb 4
-
-STACK_TOP equ glb_mboot_ptr-100H	 ; 内核栈顶
-
+section .init.data 			 ; 开启分页前临时的数据段
+stack: times 1024 db 0
+STACK_TOP equ $ -stack -1
+mboot_ptr_tmp: dd 0				;全局的 multiboot 数据结构指针
 ;-----------------------------------------------------------------------------
