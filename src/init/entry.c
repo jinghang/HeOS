@@ -24,6 +24,32 @@ __attribute__((section(".init.data"))) pgd_t *pte_high =(pgd_t *)0x3000;
 // 内核入口函数
 __attribute__((section(".init.text"))) void kernel_entry(){
     //
+    pgd_tmp[0] = (uint32_t)pte_low | PAGE_PRESENT | PAGE_WRITE;
+    pgd_tmp[PGD_INDEX(PAGE_OFFSET)] = (uint32_t)pte_high | PAGE_PRESENT | PAGE_WRITE;
+
+    // 映射 0x00000000-0x00400000 的物理地址到虚拟地址 0xC0000000-0xC0400000
+    for(int i = 0; i < 1024; i++){
+        uint32_t addr = i << 12;
+        pte_low[i] = addr | PAGE_PRESENT | PAGE_WRITE;
+        pte_high[i] = addr | PAGE_PRESENT | PAGE_WRITE;
+    }
+
+    //设置临时页表
+    asm volatile("mov %0, %%cr3" : : "r"(pgd_tmp));
+
+    uint32_t cr0;
+    // 启用分页，将 cr0 寄存器的分页位置为 1 就好
+	asm volatile ("mov %%cr0, %0" : "=r" (cr0));
+	cr0 |= 0x80000000;
+	asm volatile ("mov %0, %%cr0" : : "r" (cr0));
+
+    // 切换内核栈
+    uint32_t kern_stack_top = ((uint32_t)kern_stack + STACK_SIZE) & 0xFFFFFFF0;
+    asm volatile ("mov %0, %%esp\n\t"
+			"xor %%ebp, %%ebp" : : "r" (kern_stack_top));
+    
+    // 更新全局 multiboot_t 指针
+    glb_mboot_ptr = mboot_ptr_tmp + PAGE_OFFSET;
 
     // 调用内核初始化函数
     kernel_init();
@@ -39,13 +65,13 @@ void kernel_init(){
     printk_color(background_color_black, foreground_color_green, "Hello HeOS kernel!\n");
     //panic("test");
 
-    asm volatile("int $0x03");
-    asm volatile("int $0x04");
-    asm volatile("int $0xff");
+    // asm volatile("int $0x03");
+    // asm volatile("int $0x04");
+    // asm volatile("int $0xff");
 
     init_timer(100);
     // 开启中断
-    asm volatile("sti");
+    //asm volatile("sti");
 
     printk("\n\n");
     printk("kernel in memory start: 0x%08X\n", kern_start);
