@@ -2,14 +2,14 @@
 ENTRY(start)
 SECTIONS
 {
-	PROVIDE( kern_start = 0xC0100000 );
-	. = 0x100000;
-	.init.text:
+	PROVIDE( kern_start = 0xC0100000);
+	. = 0x100000; 
+	.init.text : 
 	{
 		*(.init.text)
-		. = ALIGN（4096）;
+		. = ALIGN(4096);
 	}
-	.init.data:
+	.init.data : 
 	{
 		*(.init.data)
 		. = ALIGN(4096);
@@ -43,7 +43,7 @@ SECTIONS
 	 	. = ALIGN(4096);
 	}
 	PROVIDE( kern_end = . );
-
+	
 	/DISCARD/ : { *(.comment) *(.eh_frame) }
 	
 }
