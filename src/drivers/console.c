@@ -1,8 +1,9 @@
 #include "console.h"
 #include "common.h"
+#include "vmm.h"
 
 // 显卡地址
-static uint16_t *video_memory = (uint16_t *)0xb8000;
+static uint16_t *video_memory = (uint16_t *)(0xb8000+PAGE_OFFSET);
 
 // 屏幕光标位置
 static uint8_t cursor_x = 0;
